@@ -9,6 +9,8 @@ namespace SistemaControleDeNivel
         bool bombaSaida = false;
 
         bool emergenciaAtiva = false;
+        bool enchendoAutomatico = false;
+        bool simulacaoEnchendo = true;
 
         double nivelTanque = 0;
 
@@ -17,6 +19,15 @@ namespace SistemaControleDeNivel
         public Form1()
         {
             InitializeComponent();
+
+            modoAtual = ModoSistema.Simulacao;
+
+            lblModo.Text = "SIMULAÇÃO";
+            lblModo.ForeColor = Color.Blue;
+
+            AtualizarImagemTanque();
+            AtualizarControles();
+
             timer1.Start();
         }
         public enum ModoSistema
@@ -43,23 +54,29 @@ namespace SistemaControleDeNivel
                 lblModo.ForeColor = Color.DarkGreen;
             }
 
+            AdicionarHistorico("Modo MANUAL ativado.");
+
             AtualizarControles();
         }
         private void AtualizarControles()
         {
             bool manual = modoAtual == ModoSistema.Manual;
 
-            btnAbValEntrada.Enabled = manual;
-            btnAbValSaida.Enabled = manual;
+            bool podeOperar =
+                modoAtual == ModoSistema.Manual ||
+                modoAtual == ModoSistema.Manutencao;
 
-            btnFcValEntrada.Enabled = manual;
-            btnFcValSaida.Enabled = manual;
+            btnAbValEntrada.Enabled = podeOperar;
+            btnFcValEntrada.Enabled = podeOperar;
 
-            btnAbBmbEntrada.Enabled = manual;
-            btnAbBmbSaida.Enabled = manual;
+            btnAbValSaida.Enabled = podeOperar;
+            btnFcValSaida.Enabled = podeOperar;
 
-            btnFcBmbEntrada.Enabled = manual;
-            btnFcBmbSaida.Enabled = manual;
+            btnAbBmbEntrada.Enabled = podeOperar;
+            btnFcBmbEntrada.Enabled = podeOperar;
+
+            btnAbBmbSaida.Enabled = podeOperar;
+            btnFcBmbSaida.Enabled = podeOperar;
         }
 
         private void AtualizarImagemTanque()
@@ -114,8 +131,82 @@ namespace SistemaControleDeNivel
                 nivelTanque -= 5;
             }
 
-            if (nivelTanque > 100)
-                nivelTanque = 100;
+            if (modoAtual == ModoSistema.Automatico)
+            {
+                // Liga enchimento abaixo de 20%
+                if (nivelTanque <= 20)
+                {
+                    enchendoAutomatico = true;
+                }
+
+                // Desliga enchimento em 80%
+                if (nivelTanque >= 80)
+                {
+                    enchendoAutomatico = false;
+                }
+
+                // Enquanto estiver enchendo
+                if (enchendoAutomatico)
+                {
+                    nivelTanque += 2;
+                }
+            }
+
+            if (nivelTanque <= 20 && !enchendoAutomatico)
+            {
+                enchendoAutomatico = true;
+
+                AdicionarHistorico(
+                    "Nível abaixo de 20%. Iniciando enchimento automático."
+                );
+            }
+
+            if (nivelTanque >= 75 && enchendoAutomatico)
+            {
+                enchendoAutomatico = false;
+
+                AdicionarHistorico(
+                    "Nível atingiu 75%. Enchimento automático encerrado."
+                );
+            }
+
+            if (modoAtual == ModoSistema.Simulacao)
+            {
+                // Se estiver enchendo
+                if (simulacaoEnchendo)
+                {
+                    nivelTanque += 2;
+
+                    // Chegou ao máximo
+                    if (nivelTanque >= 100)
+                    {
+                        nivelTanque = 100;
+
+                        simulacaoEnchendo = false;
+
+                        AdicionarHistorico(
+                            "Simulação: tanque cheio. Iniciando esvaziamento."
+                        );
+                    }
+                }
+                else
+                {
+                    // Esvaziando
+                    nivelTanque -= 2;
+
+                    // Chegou ao mínimo
+                    if (nivelTanque <= 0)
+                    {
+                        nivelTanque = 0;
+
+                        simulacaoEnchendo = true;
+
+                        AdicionarHistorico(
+                            "Simulação: tanque vazio. Iniciando enchimento."
+                        );
+                    }
+                }
+            }
 
             if (nivelTanque < 0)
                 nivelTanque = 0;
@@ -123,68 +214,100 @@ namespace SistemaControleDeNivel
             AtualizarImagemTanque();
         }
 
+        private void AdicionarHistorico(string mensagem)
+        {
+            lstHistorico.Items.Insert(
+                0,
+                $"[{DateTime.Now:HH:mm:ss}] {mensagem}"
+            );
+        }
+
         private void btnAbValEntrada_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             valvulaEntrada = true;
+
+            AdicionarHistorico("Válvula de entrada aberta.");
         }
 
         private void btnFcValEntrada_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             valvulaEntrada = false;
+
+            AdicionarHistorico("Válvula de entrada fechada.");
         }
 
         private void btnAbBmbEntrada_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             bombaEntrada = true;
+
+            AdicionarHistorico("Bomba de entrada ligada.");
+
+            lblBombaEntrada.Text = "Ligado";
         }
 
         private void btnFcBmbEntrada_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             bombaEntrada = false;
+
+            AdicionarHistorico("Bomba de entrada desligada.");
+
+            lblBombaEntrada.Text = "Desligado";
         }
 
         private void btnAbValSaida_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             valvulaSaida = true;
+
+            AdicionarHistorico("Valvula de saida ligada.");
         }
 
         private void btnFcValSaida_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             valvulaSaida = false;
+
+            AdicionarHistorico("Valvula de saida desligada.");
         }
 
         private void btnAbBmbSaida_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             bombaSaida = true;
+
+            AdicionarHistorico("Bomba de saida ligada.");
+
+            lblBombaSaida.Text = "Ligado";
         }
 
         private void btnFcBmbSaida_Click(object sender, EventArgs e)
         {
-            if (modoAtual != ModoSistema.Manual)
+            if (modoAtual != ModoSistema.Manual && modoAtual != ModoSistema.Manutencao)
                 return;
 
             bombaSaida = false;
+
+            AdicionarHistorico("Bomba de saida desligada.");
+
+            lblBombaSaida.Text = "Desligado";
         }
 
         private void DesabilitarSistema()
@@ -233,6 +356,8 @@ namespace SistemaControleDeNivel
                 DesabilitarSistema();
 
                 btnEmergencia.BackColor = Color.Red;
+
+                AdicionarHistorico("PARADA DE EMERGÊNCIA acionada.");
             }
 
             else
@@ -253,7 +378,57 @@ namespace SistemaControleDeNivel
                 btnSimulacao.Enabled = true;
 
                 btnEmergencia.BackColor = Color.White;
+
+                AdicionarHistorico("PARADA DE EMERGÊNCIA liberada.");
             }
+        }
+
+        private void btnAutomatico_Click(object sender, EventArgs e)
+        {
+            modoAtual = ModoSistema.Automatico;
+
+            if (modoAtual != ModoSistema.Automatico)
+            {
+                lblModo.Text = "...";
+                lblModo.ForeColor = Color.Black;
+            }
+            else
+            {
+                lblModo.Text = "AUTOMATICO";
+                lblModo.ForeColor = Color.DarkGreen;
+            }
+
+        }
+
+        private void btnSimulacao_Click(object sender, EventArgs e)
+        {
+            modoAtual = ModoSistema.Simulacao;
+
+            lblModo.Text = "SIMULAÇÃO";
+            lblModo.ForeColor = Color.Blue;
+
+            AdicionarHistorico("Modo SIMULAÇÃO ativado.");
+
+            AtualizarControles();
+        }
+
+        private void btnManutencao_Click(object sender, EventArgs e)
+        {
+            modoAtual = ModoSistema.Manutencao;
+
+            lblModo.Text = "MANUTENÇÃO";
+            lblModo.ForeColor = Color.Orange;
+
+            MessageBox.Show(
+                "Sistema em manutenção",
+                "Manutenção",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            AdicionarHistorico("Modo MANUTENÇÃO ativado.");
+
+            AtualizarControles();
         }
     }
 }

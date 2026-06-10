@@ -67,6 +67,19 @@
             panel6 = new Panel();
             label12 = new Label();
             panel7 = new Panel();
+            lstHistorico = new ListBox();
+            panel8 = new Panel();
+            label13 = new Label();
+            panel9 = new Panel();
+            panel10 = new Panel();
+            label14 = new Label();
+            panel12 = new Panel();
+            label15 = new Label();
+            panel13 = new Panel();
+            lblBombaEntrada = new Label();
+            lblBombaSaida = new Label();
+            label16 = new Label();
+            label17 = new Label();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             panel4.SuspendLayout();
@@ -76,6 +89,10 @@
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             panel7.SuspendLayout();
+            panel8.SuspendLayout();
+            panel9.SuspendLayout();
+            panel10.SuspendLayout();
+            panel12.SuspendLayout();
             SuspendLayout();
             // 
             // panel2
@@ -99,6 +116,7 @@
             btnManutencao.TabIndex = 4;
             btnManutencao.Text = "MANUTENÇÃO";
             btnManutencao.UseVisualStyleBackColor = true;
+            btnManutencao.Click += btnManutencao_Click;
             // 
             // btnEmergencia
             // 
@@ -118,6 +136,7 @@
             btnSimulacao.TabIndex = 2;
             btnSimulacao.Text = "Simulação";
             btnSimulacao.UseVisualStyleBackColor = true;
+            btnSimulacao.Click += btnSimulacao_Click;
             // 
             // btnAutomatico
             // 
@@ -127,6 +146,7 @@
             btnAutomatico.TabIndex = 1;
             btnAutomatico.Text = "Automático";
             btnAutomatico.UseVisualStyleBackColor = true;
+            btnAutomatico.Click += btnAutomatico_Click;
             // 
             // btnManual
             // 
@@ -482,11 +502,144 @@
             panel7.Size = new Size(270, 38);
             panel7.TabIndex = 7;
             // 
+            // lstHistorico
+            // 
+            lstHistorico.FormattingEnabled = true;
+            lstHistorico.Location = new Point(325, 380);
+            lstHistorico.Name = "lstHistorico";
+            lstHistorico.Size = new Size(284, 244);
+            lstHistorico.TabIndex = 8;
+            // 
+            // panel8
+            // 
+            panel8.BackColor = Color.DarkBlue;
+            panel8.BorderStyle = BorderStyle.FixedSingle;
+            panel8.Controls.Add(panel10);
+            panel8.Controls.Add(label13);
+            panel8.Location = new Point(325, 344);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(284, 38);
+            panel8.TabIndex = 7;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.ForeColor = Color.WhiteSmoke;
+            label13.Location = new Point(69, 3);
+            label13.Name = "label13";
+            label13.Size = new Size(112, 25);
+            label13.TabIndex = 0;
+            label13.Text = "HISTÓRICO";
+            // 
+            // panel9
+            // 
+            panel9.BorderStyle = BorderStyle.FixedSingle;
+            panel9.Controls.Add(label17);
+            panel9.Controls.Add(label16);
+            panel9.Controls.Add(lblBombaSaida);
+            panel9.Controls.Add(lblBombaEntrada);
+            panel9.Location = new Point(924, 599);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(371, 203);
+            panel9.TabIndex = 9;
+            // 
+            // panel10
+            // 
+            panel10.BackColor = Color.DarkBlue;
+            panel10.BorderStyle = BorderStyle.FixedSingle;
+            panel10.Controls.Add(label14);
+            panel10.Location = new Point(-1, -1);
+            panel10.Name = "panel10";
+            panel10.Size = new Size(284, 38);
+            panel10.TabIndex = 8;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label14.ForeColor = Color.WhiteSmoke;
+            label14.Location = new Point(69, 3);
+            label14.Name = "label14";
+            label14.Size = new Size(112, 25);
+            label14.TabIndex = 0;
+            label14.Text = "HISTÓRICO";
+            // 
+            // panel12
+            // 
+            panel12.BackColor = Color.DarkBlue;
+            panel12.BorderStyle = BorderStyle.FixedSingle;
+            panel12.Controls.Add(panel13);
+            panel12.Controls.Add(label15);
+            panel12.Location = new Point(924, 563);
+            panel12.Name = "panel12";
+            panel12.Size = new Size(371, 38);
+            panel12.TabIndex = 8;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label15.ForeColor = Color.WhiteSmoke;
+            label15.Location = new Point(113, 7);
+            label15.Name = "label15";
+            label15.Size = new Size(178, 25);
+            label15.TabIndex = 0;
+            label15.Text = "Status das Bombas";
+            // 
+            // panel13
+            // 
+            panel13.BorderStyle = BorderStyle.FixedSingle;
+            panel13.Location = new Point(188, 34);
+            panel13.Name = "panel13";
+            panel13.Size = new Size(182, 198);
+            panel13.TabIndex = 1;
+            // 
+            // lblBombaEntrada
+            // 
+            lblBombaEntrada.AutoSize = true;
+            lblBombaEntrada.Location = new Point(29, 155);
+            lblBombaEntrada.Name = "lblBombaEntrada";
+            lblBombaEntrada.Size = new Size(58, 15);
+            lblBombaEntrada.TabIndex = 0;
+            lblBombaEntrada.Text = "Desligada";
+            // 
+            // lblBombaSaida
+            // 
+            lblBombaSaida.AutoSize = true;
+            lblBombaSaida.Location = new Point(273, 155);
+            lblBombaSaida.Name = "lblBombaSaida";
+            lblBombaSaida.Size = new Size(58, 15);
+            lblBombaSaida.TabIndex = 1;
+            lblBombaSaida.Text = "Desligada";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(4, 39);
+            label16.Name = "label16";
+            label16.Size = new Size(105, 15);
+            label16.TabIndex = 16;
+            label16.Text = "BOMBA ENTRADA";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(257, 39);
+            label17.Name = "label17";
+            label17.Size = new Size(85, 15);
+            label17.TabIndex = 16;
+            label17.Text = "BOMBA SAÍDA";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1307, 841);
+            Controls.Add(panel12);
+            Controls.Add(panel9);
+            Controls.Add(panel8);
+            Controls.Add(lstHistorico);
             Controls.Add(panel7);
             Controls.Add(panel6);
             Controls.Add(panel5);
@@ -511,6 +664,14 @@
             panel6.PerformLayout();
             panel7.ResumeLayout(false);
             panel7.PerformLayout();
+            panel8.ResumeLayout(false);
+            panel8.PerformLayout();
+            panel9.ResumeLayout(false);
+            panel9.PerformLayout();
+            panel10.ResumeLayout(false);
+            panel10.PerformLayout();
+            panel12.ResumeLayout(false);
+            panel12.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -553,5 +714,18 @@
         private Panel panel6;
         private Label label12;
         private Panel panel7;
+        private ListBox lstHistorico;
+        private Panel panel8;
+        private Label label13;
+        private Panel panel10;
+        private Label label14;
+        private Panel panel9;
+        private Panel panel12;
+        private Label label15;
+        private Panel panel13;
+        private Label label17;
+        private Label label16;
+        private Label lblBombaSaida;
+        private Label lblBombaEntrada;
     }
 }

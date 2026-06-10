@@ -143,6 +143,16 @@ namespace SistemaControleDeNivel.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bomba_entrada {
+            get {
+                object obj = ResourceManager.GetObject("bomba entrada", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap btnEmAberto {
             get {
                 object obj = ResourceManager.GetObject("btnEmAberto", resourceCulture);
